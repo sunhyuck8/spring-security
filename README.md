@@ -1,20 +1,41 @@
-# 스프링 시큐리티 학습 저장소
+# 스프링 시큐리티 Chapter 2
 
-이 저장소는 스프링 시큐리티를 학습하고 실습하는 내용을 담고 있습니다.
+## 소개
+이 브랜치는 스프링 시큐리티의 기본 인증 기능을 구현한 예제 코드입니다.
 
-## 구성
+## 주요 기능
 
-각 장(Chapter)별로 브랜치를 구성하여 학습 내용을 관리합니다:
+1. 기본 인증 방식 구현
+   - Form 로그인 설정
+   - HTTP Basic 인증 설정
 
-- `chapter1-basic`: 스프링 시큐리티 기초 설정
-- `chapter2-main`: 현재 스프링 시큐리티 기본 인증 구성
+2. 권한 설정
+   - URL 기반 권한 설정
+   - 로그인 페이지 접근 허용
+   - 나머지 요청은 인증 필요
 
-## 주요 내용
+## 핵심 코드
 
-### Chapter 2 - 스프링 시큐리티 기본 구성
-- 기본 인증 방식 (FormLogin, HttpBasic)
-- Security Filter Chain 설정
-- 인증/인가 설정
+### SecurityConfig.java
+```java
+@EnableWebSecurity
+@Configuration
+public class SecurityConfig {
+
+    @Bean
+    SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
+        http.authorizeHttpRequests(authorizeRequests ->
+                authorizeRequests
+                        .requestMatchers("/login").permitAll()
+                        .anyRequest().authenticated()
+                )
+             .formLogin(Customizer.withDefaults())
+             .httpBasic(Customizer.withDefaults());
+
+        return http.build();
+    }
+}
+```
 
 ## 기술 스택
 - Java 17
